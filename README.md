@@ -1,7 +1,7 @@
 # xroad-fileservice
 
-File Service - a sample web service for transferring files over X-Road. Currently supports only serving files. 
-The file contents are returned as using [MTOM](https://www.w3.org/Submission/soap11mtom10)  
+File Service - a sample web service for transferring files over X-Road. Currently supports only serving files.
+The file contents are returned using [MTOM](https://www.w3.org/Submission/soap11mtom10)
 
 ## Building
 
@@ -10,31 +10,31 @@ Requires JDK 8 to build and JRE 8 to run.
     git clone https://github.com/vrk-kpa/xroad-fileservice
     cd xroad-fileservice
     ./gradlew build
-   
+
 The build produces a runnable jar in build/libs
-    
+
 ## Running
 
-1. Create a directory for downloadable files (default location /var/spool/xroad-fileservice/outgoing)    
-    ```[sudo] mkdir -p /var/spool/xroad-fileservice/outgoing```     
-2. Run the service: 
+1. Create a directory for downloadable files (default location /var/spool/xroad-fileservice/outgoing)
+    ```[sudo] mkdir -p /var/spool/xroad-fileservice/outgoing```
+2. Run the service:
     ```
     java -jar xroad-fileservice-1.0.jar \
         --server.port=8080 \
         --outgoing-directory=/var/spool/xroad-fileservice/outgoing
-    ``` 
+    ```
     The parameters are optional if the default values (above) are used.
-    
-## Testing    
+
+## Testing
 The service [WSDL](src/main/resources/fileservice.wsdl) is available from http://\<host:port\>/fileservice?wsdl
 
 Example request (using curl)
 ```
 curl -H 'Content-Type:text/xml' --data-binary @-  http://localhost:8080/fileservice <<EOF
-<soapenv:Envelope 
-    xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
-    xmlns:xro="http://x-road.eu/xsd/xroad.xsd" 
-    xmlns:iden="http://x-road.eu/xsd/identifiers" 
+<soapenv:Envelope
+    xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:xro="http://x-road.eu/xsd/xroad.xsd"
+    xmlns:iden="http://x-road.eu/xsd/identifiers"
     xmlns:f="http://vrk.fi/xroad/fileservice">
    <soapenv:Header>
       <xro:protocolVersion>4.0</xro:protocolVersion>
@@ -47,7 +47,7 @@ curl -H 'Content-Type:text/xml' --data-binary @-  http://localhost:8080/fileserv
          <iden:subsystemCode>FILESERVICE</iden:subsystemCode>
          <iden:serviceCode>get</iden:serviceCode>
       </xro:service>
-      <xro:client iden:objectType="?">
+      <xro:client iden:objectType="SUBSYSTEM">
          <iden:xRoadInstance>FI</iden:xRoadInstance>
          <iden:memberClass>GOV</iden:memberClass>
          <iden:memberCode>CLIENT</iden:memberCode>
@@ -101,7 +101,7 @@ Content-ID: <root.message@cxf.apache.org>
   <iden:subsystemCode>FILESERVICE</iden:subsystemCode>
   <iden:serviceCode>get</iden:serviceCode>
  </xro:service>
- <xro:client xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers" iden:objectType="?">
+ <xro:client xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers" iden:objectType="SUBSYSTEM">
   <iden:xRoadInstance>FI</iden:xRoadInstance>
   <iden:memberClass>GOV</iden:memberClass>
   <iden:memberCode>CLIENT</iden:memberCode>
@@ -124,3 +124,4 @@ Content-Disposition: attachment;name="foo"
 
 bar
 ```
+
