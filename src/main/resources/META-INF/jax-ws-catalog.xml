@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <public publicId="http://x-road.eu/xsd/identifiers" uri="classpath:/identifiers.xsd"/>
+    <system systemId="http://x-road.eu/xsd/identifiers.xsd" uri="classpath:/identifiers.xsd"/>
+
+    <public publicId="http://x-road.eu/xsd/xroad.xsd" uri="classpath:/xroad.xsd"/>
+    <system systemId="http://x-road.eu/xsd/xroad.xsd" uri="classpath:/xroad.xsd"/>
+
+    <public publicId="http://www.w3.org/2005/05/xmlmime" uri="classpath:/xmlmime.xsd"/>
+    <system systemId="http://www.w3.org/2005/05/xmlmime.xsd" uri="classpath:/xmlmime.xsd"/>
+
+    <public publicId="http://www.w3.org/XML/1998/namespace" uri="classpath:/xml.xsd"/>
+    <system systemId="http://www.w3.org/2001/xml.xsd" uri="classpath:/xml.xsd"/>
+</catalog>
