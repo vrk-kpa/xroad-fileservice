@@ -1,5 +1,5 @@
 # xroad-fileservice
-===================
+
 File Service - a sample web service for transferring files over X-Road. Currently supports only serving files. 
 The file contents are returned as using [MTOM](https://www.w3.org/Submission/soap11mtom10)  
 
