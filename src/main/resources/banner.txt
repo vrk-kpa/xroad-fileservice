@@ -1,0 +1,5 @@
+       _
+\\/ __ |_)  _   _.  _|\\
+//\    | \ (_) (_| (_|//
+:: File Service ${application.formatted-version} ::
+:: Spring Boot ${spring-boot.formatted-version} ::
