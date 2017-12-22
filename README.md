@@ -11,22 +11,42 @@ Requires JDK 8 to build and JRE 8 to run.
     cd xroad-fileservice
     ./gradlew build
 
-The build produces a runnable jar in build/libs
+The build produces two runnable jars: the  service (in service/build/libs) and a simple client (in client/build/libs)
 
-## Running
+## Running the Service
 
 1. Create a directory for downloadable files (default location /var/spool/xroad-fileservice/outgoing)
     ```[sudo] mkdir -p /var/spool/xroad-fileservice/outgoing```
 2. Run the service:
     ```
-    java -jar xroad-fileservice-1.0.jar \
+    java -jar service/build/libs/xroad-fileservice-1.0.jar \
         --server.port=8080 \
         --outgoing-directory=/var/spool/xroad-fileservice/outgoing
     ```
     The parameters are optional if the default values (above) are used.
 
-## Testing
 The service [WSDL](src/main/resources/fileservice.wsdl) is available from http://\<host:port\>/fileservice?wsdl
+
+## Using the client
+
+    java -jar client/build/libs/xroad-fileclient-1.0.jar \
+    http://localhost:8080/fileservice \
+    INSTANCE/CLASS/MEMBER/CLIENTSUBSYSTEM \
+    INSTANCE/CLASS/MEMBER/SERVICESUBSYSTEM \
+    filename
+    
+Without parameters, a short usage note is outputted:
+    
+    java -jar client/build/libs/xroad-fileclient-1.0.jar
+    
+    Usage: (java -jar ...) <url> <clientId> <memberId> <filename> [outfile]
+    	url     : client security server URL
+    	clientId: instanceId/memberClass/memberCode/subsystemCode
+    	memberId: service memberId, same format as clientId
+    	filename: name of the file to fetch
+    	outfile: file to write the output to or standard output if omitted
+
+## Testing without the client
 
 Example request (using curl)
 ```
@@ -124,4 +144,3 @@ Content-Disposition: attachment;name="foo"
 
 bar
 ```
-
