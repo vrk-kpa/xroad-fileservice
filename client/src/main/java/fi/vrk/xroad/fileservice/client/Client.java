@@ -130,14 +130,6 @@ public class Client {
                 + "\toutfile : file to write the output to (must not exist) or standard output if omitted\n");
     }
 
-    static {
-        try (InputStream is = Client.class.getResourceAsStream("/logging.properties")) {
-            LogManager.getLogManager().readConfiguration(is);
-        } catch (IOException e) {
-            //Ignore
-        }
-    }
-
     static class ServiceIdBuilder {
         private final String xRoadInstance;
         private final String memberClass;
@@ -164,6 +156,17 @@ public class Client {
             serviceId.setServiceVersion(serviceVersion);
             serviceId.setServiceCode(serviceCode);
             return serviceId;
+        }
+    }
+
+    static {
+        if (System.getProperty("java.util.logging.config.file") == null) {
+            // read default configuration from class path
+            try (InputStream is = Client.class.getResourceAsStream("/logging.properties")) {
+                LogManager.getLogManager().readConfiguration(is);
+            } catch (IOException e) {
+                //ignore
+            }
         }
     }
 }
