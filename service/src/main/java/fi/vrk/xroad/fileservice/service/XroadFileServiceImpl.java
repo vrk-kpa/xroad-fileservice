@@ -1,3 +1,26 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2017 Population Register Centre
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package fi.vrk.xroad.fileservice.service;
 
 import fi.vrk.xroad.fileservice.ErrorResponse;
@@ -29,6 +52,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * XRoad FileService Implementation
+ */
 @WebService(targetNamespace = "http://vrk.fi/xroad/fileservice", wsdlLocation = "fileservice.wsdl",
         portName = "XroadFileServicePort", serviceName = "XroadFileService")
 @MTOM
@@ -54,12 +80,11 @@ public class XroadFileServiceImpl implements XroadFileService {
         log.info("({}) GET \"{}\"", asString(clientId), parameters.getName());
 
         final String name = parameters.getName();
-        if ( name == null || "".equals(name) ) {
+        if (name == null || "".equals(name)) {
             throw new ErrorResponse("Expected a file name");
         }
 
-        Path file = Paths.get(outgoingDirectory,
-                Paths.get("/", name).normalize().toString());
+        Path file = Paths.get(outgoingDirectory, Paths.get("/", name).normalize().toString());
 
         if (!Files.exists(file)) {
             final ErrorResponseType detail = new ErrorResponseType();
@@ -102,8 +127,7 @@ public class XroadFileServiceImpl implements XroadFileService {
         XRoadClientIdentifierType clientId = null;
         if (client != null) {
             try {
-                clientId = identifiers
-                        .createUnmarshaller()
+                clientId = identifiers.createUnmarshaller()
                         .unmarshal((Node) client.getObject(), XRoadClientIdentifierType.class).getValue();
             } catch (JAXBException e) {
                 throw new ErrorResponse("Unable to unmarshal client id", e);
@@ -113,7 +137,7 @@ public class XroadFileServiceImpl implements XroadFileService {
     }
 
     @SuppressWarnings("unchecked")
-    private Map<String, Header> getXroadHeaders(MessageContext ctx) {
+    private static Map<String, Header> getXroadHeaders(MessageContext ctx) {
         final Map<String, Header> xroadHeaders = new HashMap<>();
         final List<Header> headers = (List<Header>) ctx.get(Header.HEADER_LIST);
         for (Header header : headers) {
