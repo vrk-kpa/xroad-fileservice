@@ -46,6 +46,7 @@ public class XroadFileServiceImpl implements XroadFileService {
 
     @Override
     public GetResponseType get(GetRequestType parameters) throws ErrorResponse {
+
         GetResponseType response = new GetResponseType();
         final Map<String, Header> xroadHeaders = getXroadHeaders(ctx.getMessageContext());
 

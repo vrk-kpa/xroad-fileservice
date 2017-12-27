@@ -5,6 +5,8 @@ import fi.vrk.xroad.fileservice.ErrorResponse;
 import eu.x_road.xsd.identifiers.XRoadClientIdentifierType;
 import eu.x_road.xsd.identifiers.XRoadObjectType;
 import eu.x_road.xsd.identifiers.XRoadServiceIdentifierType;
+import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.transport.http.HTTPConduit;
 
 import javax.activation.DataHandler;
 import javax.xml.ws.BindingProvider;
@@ -25,12 +27,15 @@ import java.util.logging.Logger;
 public class Client {
 
     private final XRoadClientIdentifierType clientId;
-    private final XRoadServiceIdentifierType serviceId;
+    private final ServiceIdBuilder serviceId;
     private final XroadFileService port;
 
     public Client(String url, String client, String service) {
         XroadFileService_Service ss = new XroadFileService_Service((URL)null);
         port = ss.getXroadFileServicePort();
+
+        configureReceiveTimeout();
+
         BindingProvider bindingProvider = (BindingProvider) port;
         bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
 
@@ -51,20 +56,20 @@ public class Client {
             throw new IllegalArgumentException(
                     "Expected serviceId in format instanceId/memberClass/memberCode/subsystemCode");
         }
-        serviceId = new XRoadServiceIdentifierType();
-        serviceId.setObjectType(XRoadObjectType.SERVICE);
-        serviceId.setXRoadInstance(s[0]);
-        serviceId.setMemberClass(s[1]);
-        serviceId.setMemberCode(s[2]);
-        serviceId.setSubsystemCode(s[3]);
-        serviceId.setServiceCode("get");
+        serviceId = new ServiceIdBuilder(s[0], s[1], s[2], s[3], null);
+    }
+
+    private void configureReceiveTimeout() {
+        final org.apache.cxf.endpoint.Client cxfClient = ClientProxy.getClient(port);
+        ((HTTPConduit)cxfClient.getConduit()).getClient().setReceiveTimeout(
+                Integer.getInteger("fileservice.client.receiveTimeout", 0 /* infinite */));
     }
 
     public DataHandler get(String fileName) throws ErrorResponse {
         return port.get(
                 fileName,
                 holder(clientId),
-                holder(serviceId),
+                holder(serviceId.build("get")),
                 holder("fileserviceclient"),
                 holder(UUID.randomUUID().toString()),
                 holder("4.0"));
@@ -130,6 +135,35 @@ public class Client {
             LogManager.getLogManager().readConfiguration(is);
         } catch (IOException e) {
             //Ignore
+        }
+    }
+
+    static class ServiceIdBuilder {
+        private final String xRoadInstance;
+        private final String memberClass;
+        private final String memberCode;
+        private final String subsystemCode;
+        private final String serviceVersion;
+
+        ServiceIdBuilder(String xRoadInstance, String memberClass, String memberCode, String subsystemCode,
+                String serviceVersion) {
+            this.xRoadInstance = xRoadInstance;
+            this.memberClass = memberClass;
+            this.memberCode = memberCode;
+            this.subsystemCode = subsystemCode;
+            this.serviceVersion = serviceVersion;
+        }
+
+        XRoadServiceIdentifierType build(String serviceCode) {
+            final XRoadServiceIdentifierType serviceId = new XRoadServiceIdentifierType();
+            serviceId.setObjectType(XRoadObjectType.SERVICE);
+            serviceId.setXRoadInstance(xRoadInstance);
+            serviceId.setMemberClass(memberClass);
+            serviceId.setMemberCode(memberCode);
+            serviceId.setSubsystemCode(subsystemCode);
+            serviceId.setServiceVersion(serviceVersion);
+            serviceId.setServiceCode(serviceCode);
+            return serviceId;
         }
     }
 }
