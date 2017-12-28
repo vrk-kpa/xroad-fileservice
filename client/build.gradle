@@ -10,7 +10,7 @@ jar {
     manifest {
         attributes 'Implementation-Title' : 'xroad-fileclient',
                 'Implementation-Version' : version,
-                'Main-Class' : 'fi.vrk.xroad.fileservice.client.Client'
+                'Main-Class' : 'fi.vrk.xroad.fileservice.client.Main'
     }
 }
 
