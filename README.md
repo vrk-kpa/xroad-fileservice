@@ -33,19 +33,24 @@ The service [WSDL](src/main/resources/fileservice.wsdl) is available from http:/
     http://localhost:8080/fileservice \
     INSTANCE/CLASS/MEMBER/CLIENTSUBSYSTEM \
     INSTANCE/CLASS/MEMBER/SERVICESUBSYSTEM \
+    GET \
     filename
     
 Without parameters, a short usage note is outputted:
     
     java -jar client/build/libs/xroad-fileclient-1.0.jar
-    
-    Usage: (java -jar ...) <url> <clientId> <memberId> <filename> [outfile]
-    	url     : client security server URL
-    	clientId: instanceId/memberClass/memberCode/subsystemCode
-    	memberId: service memberId, same format as clientId
-    	filename: name of the file to fetch
-    	outfile: file to write the output to or standard output if omitted
 
+    Usage: (java -jar ...) <url> <clientId> <memberId> <command> [command arguments]
+	    url     : service or client security server URL
+	    clientId: instanceId/memberClass/memberCode/subsystemCode
+	    memberId: service memberId, same format as clientId
+	    filename: name of the file to fetch
+	    command : get
+
+	              get <filename> [outfile]
+	              filename : name of the file to fetch
+	              outfile  : name of the output file, or standard output if omitted
+    
 ## Testing without the client
 
 Example request (using curl)
