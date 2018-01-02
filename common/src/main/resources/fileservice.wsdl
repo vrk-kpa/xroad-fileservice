@@ -29,6 +29,26 @@
                 </xs:sequence>
             </xs:complexType>
 
+            <xs:complexType name="PutRequestType">
+                <xs:sequence>
+                    <xs:element name="name" type="xs:string"/>
+                    <xs:element name="object" minOccurs="0" type="xs:base64Binary"
+                                xmime:expectedContentTypes="application/octet-stream"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="PutResponseType">
+                <xs:sequence>
+                    <xs:element name="success" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="ListResponseType">
+                <xs:sequence>
+                    <xs:element name="name" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
             <xs:complexType name="ErrorResponseType">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="error" type="xs:string"/>
@@ -37,6 +57,12 @@
 
             <xs:element name="get" type="tns:GetRequestType"/>
             <xs:element name="getResponse" type="tns:GetResponseType"/>
+            <xs:element name="put" type="tns:PutRequestType"/>
+            <xs:element name="putResponse" type="tns:PutResponseType"/>
+            <xs:element name="list">
+                <xs:complexType />
+            </xs:element>
+            <xs:element name="listResponse" type="tns:ListResponseType"/>
             <xs:element name="errorResponse" type="tns:ErrorResponseType"/>
         </xs:schema>
     </wsdl:types>
@@ -57,6 +83,22 @@
         <wsdl:part element="tns:getResponse" name="payload"/>
     </wsdl:message>
 
+    <wsdl:message name="put">
+        <wsdl:part element="tns:put" name="parameters"/>
+    </wsdl:message>
+
+    <wsdl:message name="putResponse">
+        <wsdl:part element="tns:putResponse" name="payload"/>
+    </wsdl:message>
+
+    <wsdl:message name="list">
+        <wsdl:part element="tns:list" name="parameters"/>
+    </wsdl:message>
+
+    <wsdl:message name="listResponse">
+        <wsdl:part element="tns:listResponse" name="payload"/>
+    </wsdl:message>
+
     <wsdl:message name="errorResponse">
         <wsdl:part name="fault" element="tns:errorResponse"/>
     </wsdl:message>
@@ -66,6 +108,20 @@
             <wsdl:input message="tns:get" name="get">
             </wsdl:input>
             <wsdl:output message="tns:getResponse" name="getResponse">
+            </wsdl:output>
+            <wsdl:fault name="errorResponse" message="tns:errorResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="put">
+            <wsdl:input message="tns:put" name="put">
+            </wsdl:input>
+            <wsdl:output message="tns:putResponse" name="putResponse">
+            </wsdl:output>
+            <wsdl:fault name="errorResponse" message="tns:errorResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="list">
+            <wsdl:input message="tns:list" name="list">
+            </wsdl:input>
+            <wsdl:output message="tns:listResponse" name="listResponse">
             </wsdl:output>
             <wsdl:fault name="errorResponse" message="tns:errorResponse"/>
         </wsdl:operation>
@@ -84,6 +140,50 @@
                 <soap:header message="tns:headers" part="protocolVersion" use="literal"/>
             </wsdl:input>
             <wsdl:output name="getResponse">
+                <soap:body parts="payload" use="literal"/>
+                <soap:header message="tns:headers" part="client" use="literal"/>
+                <soap:header message="tns:headers" part="service" use="literal"/>
+                <soap:header message="tns:headers" part="userId" use="literal"/>
+                <soap:header message="tns:headers" part="id" use="literal"/>
+                <soap:header message="tns:headers" part="protocolVersion" use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="errorResponse">
+                <soap:fault name="errorResponse" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="put">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="put">
+                <soap:body use="literal"/>
+                <soap:header message="tns:headers" part="client" use="literal"/>
+                <soap:header message="tns:headers" part="service" use="literal"/>
+                <soap:header message="tns:headers" part="userId" use="literal"/>
+                <soap:header message="tns:headers" part="id" use="literal"/>
+                <soap:header message="tns:headers" part="protocolVersion" use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="putResponse">
+                <soap:body parts="payload" use="literal"/>
+                <soap:header message="tns:headers" part="client" use="literal"/>
+                <soap:header message="tns:headers" part="service" use="literal"/>
+                <soap:header message="tns:headers" part="userId" use="literal"/>
+                <soap:header message="tns:headers" part="id" use="literal"/>
+                <soap:header message="tns:headers" part="protocolVersion" use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="errorResponse">
+                <soap:fault name="errorResponse" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="list">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="list">
+                <soap:body use="literal"/>
+                <soap:header message="tns:headers" part="client" use="literal"/>
+                <soap:header message="tns:headers" part="service" use="literal"/>
+                <soap:header message="tns:headers" part="userId" use="literal"/>
+                <soap:header message="tns:headers" part="id" use="literal"/>
+                <soap:header message="tns:headers" part="protocolVersion" use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="listResponse">
                 <soap:body parts="payload" use="literal"/>
                 <soap:header message="tns:headers" part="client" use="literal"/>
                 <soap:header message="tns:headers" part="service" use="literal"/>

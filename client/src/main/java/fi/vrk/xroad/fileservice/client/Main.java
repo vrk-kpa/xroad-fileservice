@@ -66,6 +66,12 @@ public final class Main {
                 case "get":
                     handleGet(client, required(args, 4), optional(args, 5));
                     break;
+                case "list":
+                    handleList(client);
+                    break;
+                case "put":
+                    handlePut(client, required(args, 4), optional(args, 5));
+                    break;
                 default:
                     throw new IllegalArgumentException("Unknown command: " + args[3]);
             }
@@ -88,6 +94,10 @@ public final class Main {
         System.exit(status);
     }
 
+    private static void handleList(Client client) throws ErrorResponse {
+        client.list().forEach(System.out::println);
+    }
+
     private static void handleGet(Client client, String fileName, Optional<String> outputName)
             throws ErrorResponse, IOException {
 
@@ -97,6 +107,17 @@ public final class Main {
                 .orElse(System.out)) {
             client.get(fileName).writeTo(out);
             out.flush();
+        }
+    }
+
+    private static void handlePut(Client client, String localName, Optional<String> remoteName)
+            throws IOException, ErrorResponse {
+        if ("-".equals(localName) && !remoteName.isPresent()) {
+            throw new IllegalArgumentException("Must specify remote file name if reading from standard input");
+        }
+        try (InputStream in = "-".equals(localName) ? System.in
+                : Files.newInputStream(Paths.get(localName), StandardOpenOption.READ)) {
+            client.put(remoteName.orElse(localName), in);
         }
     }
 
@@ -112,14 +133,26 @@ public final class Main {
     }
 
     private static void usage(String message) {
-        System.err.println(message);
+        if (!message.isEmpty()) System.err.println(message);
+
         System.err.print("Usage: (java -jar ...) <url> <clientId> <memberId> <command> [command arguments]\n"
                 + "\turl     : service or client security server URL\n"
                 + "\tclientId: instanceId/memberClass/memberCode/subsystemCode\n"
-                + "\tmemberId: service memberId, same format as clientId\n" + "\tfilename: name of the file to fetch\n"
-                + "\tcommand : get \n\n" + "\t          get <filename> [outfile]\n"
-                + "\t          filename : name of the file to fetch\n"
-                + "\t          outfile  : name of the output file, or standard output if omitted\n");
+                + "\tmemberId: service memberId, same format as clientId\n"
+                + "\tfilename: name of the file to fetch\n"
+                + "\tcommand : get | put | list\n"
+                + "\n"
+                + "\t          get <remote filename> [local filename]\n"
+                + "\t          remote filename : name of the remote file to fetch\n"
+                + "\t          local filename  : name of the output file, or standard output if omitted\n"
+                + "\n"
+                + "\t          put <local filename> [remote file name]\n"
+                + "\t          local filename  : name of the input file, or '-' for standard input\n"
+                + "\t          remote filename : name of the remote file (same as local file if omitted)\n"
+                + "\n"
+                + "\t          list\n"
+                + "\t          (lists downloadable files)"
+                + "\n");
     }
 
     //set up java logging configuration from classpath

@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 package fi.vrk.xroad.fileservice;
 
 import javax.activation.DataHandler;
@@ -29,21 +30,57 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlMimeType;
 import javax.xml.bind.annotation.XmlType;
 
+
 /**
- *
+ * <p>Java class for GetResponseType complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType name="GetResponseType"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="object" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
+ * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetResponseType", propOrder = {"object"})
+@XmlType(name = "GetResponseType", propOrder = {
+    "object"
+})
 public class GetResponseType {
 
     @XmlMimeType("application/octet-stream")
     protected DataHandler object;
 
+    /**
+     * Gets the value of the object property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link DataHandler }
+     *     
+     */
     public DataHandler getObject() {
         return object;
     }
 
-    public void setObject(DataHandler object) {
-        this.object = object;
+    /**
+     * Sets the value of the object property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link DataHandler }
+     *     
+     */
+    public void setObject(DataHandler value) {
+        this.object = value;
     }
+
 }

@@ -31,10 +31,16 @@ import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.transport.http.HTTPConduit;
 
 import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Holder;
+import javax.xml.ws.soap.SOAPBinding;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -57,6 +63,7 @@ public class Client {
 
         BindingProvider bindingProvider = (BindingProvider) port;
         bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
+        ((SOAPBinding)bindingProvider.getBinding()).setMTOMEnabled(true);
 
         final String[] c = client.split("/");
         if (c.length < 4) {
@@ -95,8 +102,61 @@ public class Client {
                 holder(UUID.randomUUID().toString()), holder("4.0"));
     }
 
+    /**
+     * List available files
+     */
+    public List<String> list() throws ErrorResponse {
+        return port.list(holder(clientId),
+                holder(serviceId.build("get")),
+                holder("fileserviceclient"),
+                holder(UUID.randomUUID().toString()), holder("4.0"));
+    }
+
+    /**
+     * Upload a file
+     */
+    public boolean put(String fileName, InputStream input) throws ErrorResponse {
+        return port.put(fileName,
+                new DataHandler(new StreamDataSource(fileName, input)),
+                holder(clientId),
+                holder(serviceId.build("get")),
+                holder("fileserviceclient"),
+                holder(UUID.randomUUID().toString()), holder("4.0"));
+    }
+
     private static <T> Holder<T> holder(T value) {
         return new Holder<>(value);
+    }
+
+    static class StreamDataSource implements DataSource {
+
+        private final String name;
+        private final InputStream input;
+
+        StreamDataSource(String name, InputStream input) {
+            this.name = name;
+            this.input = input;
+        }
+
+        @Override
+        public InputStream getInputStream() throws IOException {
+            return input;
+        }
+
+        @Override
+        public OutputStream getOutputStream() throws IOException {
+            return null;
+        }
+
+        @Override
+        public String getContentType() {
+            return "application/octet-stream";
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
     }
 
 }
