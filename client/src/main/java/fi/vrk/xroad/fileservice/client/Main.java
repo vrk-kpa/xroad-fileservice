@@ -117,7 +117,7 @@ public final class Main {
         }
         try (InputStream in = "-".equals(localName) ? System.in
                 : Files.newInputStream(Paths.get(localName), StandardOpenOption.READ)) {
-            client.put(remoteName.orElse(localName), in);
+            client.put(remoteName.orElse(Paths.get(localName).getFileName().toString()), in);
         }
     }
 
