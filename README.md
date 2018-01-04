@@ -28,7 +28,7 @@ The build produces two runnable jars: the  service (in service/build/libs) and a
  
 2. Run the service:
     ```
-    java -jar service/build/libs/xroad-fileservice-1.0.jar \
+    java -jar service/build/libs/xroad-fileservice.jar \
         --server.port=8080 \
         --outgoing-directory=/var/spool/xroad-fileservice/outgoing
         --incoming-directory=/var/spool/xroad-fileservice/incoming
@@ -62,7 +62,7 @@ Without parameters, a short usage note is outputted:
 
 **Download a file**
 
-    java -jar client/build/libs/xroad-fileclient-1.0.jar \
+    java -jar client/build/libs/xroad-fileclient.jar \
     http://localhost:8080/fileservice \
     INSTANCE/CLASS/MEMBER/CLIENTSUBSYSTEM \
     INSTANCE/CLASS/MEMBER/SERVICESUBSYSTEM \
@@ -72,7 +72,7 @@ Without parameters, a short usage note is outputted:
 
 **Upload a file**    
     
-    java -jar client/build/libs/xroad-fileclient-1.0.jar \
+    java -jar client/build/libs/xroad-fileclient.jar \
     http://localhost:8080/fileservice \
     INSTANCE/CLASS/MEMBER/CLIENTSUBSYSTEM \
     INSTANCE/CLASS/MEMBER/SERVICESUBSYSTEM \
@@ -82,7 +82,7 @@ Without parameters, a short usage note is outputted:
     
 **List downloadable files**
 
-    java -jar client/build/libs/xroad-fileclient-1.0.jar \
+    java -jar client/build/libs/xroad-fileclient.jar \
     http://localhost:8080/fileservice \
     INSTANCE/CLASS/MEMBER/CLIENTSUBSYSTEM \
     INSTANCE/CLASS/MEMBER/SERVICESUBSYSTEM \

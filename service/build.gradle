@@ -4,7 +4,6 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
 sourceCompatibility = 1.8
-version = '1.0'
 
 ext {
     springVersion = '1.5.9.RELEASE'
@@ -15,6 +14,7 @@ ext['tomcat.version'] =  '8.5.24'
 
 jar {
     baseName = 'xroad-fileservice'
+    archiveName = "${baseName}.${extension}"
     manifest {
         attributes  'Implementation-Title' : 'xroad-fileservice',
                     'Implementation-Version' : version

@@ -93,7 +93,7 @@ public final class Main {
             if (LOG.isLoggable(Level.FINE)) {
                 LOG.log(Level.SEVERE, "Failed", e);
             } else {
-                LOG.log(Level.SEVERE, "Failed: {1} ({2})",
+                LOG.log(Level.SEVERE, "Failed: {0} ({1})",
                         new Object[] {e.getMessage(), e.getCause() == null ? "no details" : e.getCause().getMessage()});
             }
         } catch (Exception e) {
