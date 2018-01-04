@@ -1,53 +1,30 @@
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
-
-sourceCompatibility = 1.8
-version = '1.0'
-
-ext {
-    springVersion = '1.5.8.RELEASE'
-    cxfVersion = '3.2.1'
-}
-
-jar {
-    baseName = 'xroad-fileservice'
-    manifest {
-        attributes  'Implementation-Title' : 'xroad-fileservice',
-                    'Implementation-Version' : version
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-configurations {
-    providedRuntime
-}
-
-dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web:${springVersion}") {
-        exclude module: 'spring-webmvc'
-    }
-    compile "org.springframework.boot:spring-boot-starter-tomcat:${springVersion}"
-    compile ("org.apache.cxf:cxf-spring-boot-starter-jaxws:${cxfVersion}") {
-        exclude module: 'spring-boot-starter-web'
-    }
-    compile 'ch.qos.logback:logback-classic:1.2.3'
-    compileOnly 'org.projectlombok:lombok:1.14.8'
-
-    testCompile 'junit:junit:4.12'
-    testCompile "org.springframework.boot:spring-boot-starter-test:${springVersion}"
-    testCompile "commons-io:commons-io:2.6"
-}
-
 buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+    }
+}
+
+allprojects {
     repositories {
         mavenCentral()
     }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
+    apply plugin: "license"
+    license {
+        header rootProject.file('LICENSE')
+        include '**/*.java'
+        skipExistingHeaders = true
+    }
+}
+
+subprojects {
+    apply plugin: 'checkstyle'
+    checkstyle {
+        toolVersion = "8.5"
+        configDir=file("${project.rootDir}/config/checkstyle")
     }
 }
 

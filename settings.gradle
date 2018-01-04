@@ -1,0 +1,5 @@
+rootProject.name = 'xroad-fileservice'
+
+include 'common'
+include 'service'
+include 'client'
