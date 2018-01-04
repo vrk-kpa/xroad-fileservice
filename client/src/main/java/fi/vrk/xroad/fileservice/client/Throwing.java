@@ -32,27 +32,24 @@ import java.util.function.Function;
  *
  * @param <T> Value type
  * @param <R> Return value type
- * @param <E> Exception type
  */
 @FunctionalInterface
-public interface Throwing<T, R, E extends Exception> {
-    R apply(T t) throws E;
+public interface Throwing<T, R> {
+    R apply(T t) throws Exception;
 
     /**
      * Wrap an checked exception throwing function and return a function that
      * throws only unchecked exceptions.
      */
-    static <T, R, E extends Exception> Function<T, R> wrap(Throwing<T, R, E> t) {
+    static <T, R> Function<T, R> wrap(Throwing<T, R> t) {
         return v -> {
             try {
                 return t.apply(v);
+            } catch (RuntimeException e) {
+                throw e;
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
             } catch (Exception e) {
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
-                }
-                if (e instanceof IOException) {
-                    throw new UncheckedIOException((IOException) e);
-                }
                 throw new RuntimeException(e);
             }
         };

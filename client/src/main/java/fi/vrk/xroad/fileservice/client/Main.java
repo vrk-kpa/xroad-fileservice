@@ -25,6 +25,8 @@ package fi.vrk.xroad.fileservice.client;
 
 import fi.vrk.xroad.fileservice.ErrorResponse;
 
+import javax.xml.ws.WebServiceException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -61,8 +63,9 @@ public final class Main {
         }
 
         try {
-            Client client = new Client(required(args, 0), required(args, 1), required(args, 2));
-            switch (required(args, 3).toLowerCase()) {
+            final String command = required(args, 3).toLowerCase();
+            final Client client = new Client(required(args, 0), required(args, 1), required(args, 2));
+            switch (command) {
                 case "get":
                     handleGet(client, required(args, 4), optional(args, 5));
                     break;
@@ -86,6 +89,13 @@ public final class Main {
             } else {
                 LOG.severe(e.getMessage());
             }
+        } catch (WebServiceException e) {
+            if (LOG.isLoggable(Level.FINE)) {
+                LOG.log(Level.SEVERE, "Failed", e);
+            } else {
+                LOG.log(Level.SEVERE, "Failed: {1} ({2})",
+                        new Object[] {e.getMessage(), e.getCause() == null ? "no details" : e.getCause().getMessage()});
+            }
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Unexpected error", e);
             status = 127;
@@ -98,14 +108,14 @@ public final class Main {
         client.list().forEach(System.out::println);
     }
 
-    private static void handleGet(Client client, String fileName, Optional<String> outputName)
+    private static void handleGet(Client client, String remoteName, Optional<String> localName)
             throws ErrorResponse, IOException {
 
-        try (OutputStream out = outputName
-                .map(v -> ".".equals(v) ? Paths.get(fileName).getFileName() : Paths.get(v))
+        try (OutputStream out = localName
+                .map(v -> ".".equals(v) ? Paths.get(remoteName).getFileName() : Paths.get(v))
                 .map(Throwing.wrap(p -> Files.newOutputStream(p, StandardOpenOption.CREATE_NEW)))
                 .orElse(System.out)) {
-            client.get(fileName).writeTo(out);
+            client.get(remoteName).writeTo(out);
             out.flush();
         }
     }
