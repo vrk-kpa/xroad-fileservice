@@ -107,7 +107,7 @@ public class Client {
      */
     public List<String> list() throws ErrorResponse {
         return port.list(holder(clientId),
-                holder(serviceId.build("get")),
+                holder(serviceId.build("list")),
                 holder("fileserviceclient"),
                 holder(UUID.randomUUID().toString()), holder("4.0"));
     }
@@ -119,7 +119,7 @@ public class Client {
         return port.put(fileName,
                 new DataHandler(new StreamDataSource(fileName, input)),
                 holder(clientId),
-                holder(serviceId.build("get")),
+                holder(serviceId.build("put")),
                 holder("fileserviceclient"),
                 holder(UUID.randomUUID().toString()), holder("4.0"));
     }
