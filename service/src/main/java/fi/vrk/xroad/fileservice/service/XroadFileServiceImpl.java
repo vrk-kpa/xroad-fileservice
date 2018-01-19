@@ -25,8 +25,6 @@ package fi.vrk.xroad.fileservice.service;
 
 import fi.vrk.xroad.fileservice.ErrorResponse;
 import fi.vrk.xroad.fileservice.ErrorResponseType;
-import fi.vrk.xroad.fileservice.GetRequestType;
-import fi.vrk.xroad.fileservice.GetResponseType;
 
 import eu.x_road.xsd.identifiers.XRoadClientIdentifierType;
 import lombok.extern.slf4j.Slf4j;
@@ -45,12 +43,21 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.MTOM;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * XRoad FileService Implementation
@@ -61,8 +68,14 @@ import java.util.Map;
 @Slf4j
 public class XroadFileServiceImpl implements XroadFileService {
 
+    // maximum supported file name length
+    private static final int MAX_FILENAME_LENGTH = 255;
+
     @Value("${outgoing-directory:/var/spool/xroad-fileservice/outgoing}")
-    private String outgoingDirectory;
+    private Path outgoingDirectory;
+
+    @Value("${incoming-directory:/var/spool/xroad-fileservice/incoming}")
+    private Path incomingDirectory;
 
     @Resource
     private WebServiceContext ctx;
@@ -71,35 +84,91 @@ public class XroadFileServiceImpl implements XroadFileService {
     private JAXBContext identifiers;
 
     @Override
-    public GetResponseType get(GetRequestType parameters) throws ErrorResponse {
+    public List<String> list() throws ErrorResponse {
+        return handle("LIST", "/", () -> {
+            try (DirectoryStream<Path> dir = Files.newDirectoryStream(outgoingDirectory)) {
+                return StreamSupport
+                        .stream(Spliterators.spliteratorUnknownSize(dir.iterator(), Spliterator.ORDERED), false)
+                        .filter(Files::isRegularFile)
+                        .map(p -> p.getFileName().toString())
+                        .collect(Collectors.toList());
+            } catch (IOException ioe) {
+                throw new ErrorResponse("Unable to list files");
+            }
+        });
+    }
 
-        GetResponseType response = new GetResponseType();
+    @Override
+    public DataHandler get(final String name) throws ErrorResponse {
+        return handle("GET", name, () -> {
+            if (name == null || "".equals(name)) {
+                throw new ErrorResponse("Expected a file name");
+            }
+
+            Path file = normalize(outgoingDirectory, name);
+
+            if (!Files.isRegularFile(file)) {
+                final ErrorResponseType detail = new ErrorResponseType();
+                detail.setError("File not found: " + name);
+                throw new ErrorResponse("The requested file does not exist", detail);
+            }
+
+            return new DataHandler(new FileDataSource(file.toFile()));
+        });
+    }
+
+    @Override
+    public boolean put(final String name, final DataHandler object) throws ErrorResponse {
+        return handle("PUT", name, () -> {
+            Path file = normalize(incomingDirectory, name);
+            try (OutputStream out = Files.newOutputStream(file, StandardOpenOption.CREATE_NEW)) {
+                object.writeTo(out);
+            } catch (FileAlreadyExistsException e) {
+                throw new ErrorResponse("The file already exists");
+            } catch (IOException e) {
+                try {
+                    Files.deleteIfExists(file);
+                } catch (IOException ioe) {
+                    log.warn(e.getMessage());
+                }
+                log.warn("Failed to put file", e);
+                throw new ErrorResponse("Unable to save file", e);
+            }
+            return true;
+        });
+    }
+
+    private Path normalize(Path prefix, String fileName) throws ErrorResponse {
+        if (fileName.length() > MAX_FILENAME_LENGTH) {
+            throw new ErrorResponse("Invalid file name");
+        }
+
+        final Path name = prefix.resolve(fileName).normalize().getFileName();
+        if (name == null || !Objects.equals(name.toString(), fileName)) {
+            throw new ErrorResponse("Invalid file name");
+        }
+
+        return prefix.resolve(name);
+    }
+
+    private <T> T handle(String method, String details, ThrowingSupplier<T> supplier) throws ErrorResponse {
         final Map<String, Header> xroadHeaders = getXroadHeaders(ctx.getMessageContext());
 
         XRoadClientIdentifierType clientId = getClientId(xroadHeaders);
-        log.info("({}) GET \"{}\"", asString(clientId), parameters.getName());
+        log.info(String.format("(%s) %s \"%.256s\"", asString(clientId), method, details));
 
-        final String name = parameters.getName();
-        if (name == null || "".equals(name)) {
-            throw new ErrorResponse("Expected a file name");
-        }
-
-        Path file = Paths.get(outgoingDirectory, Paths.get("/", name).normalize().toString());
-
-        if (!Files.exists(file)) {
-            final ErrorResponseType detail = new ErrorResponseType();
-            detail.setError("File not found: " + name);
-            throw new ErrorResponse("The requested file does not exist", detail);
-        }
-
-        response.setObject(new DataHandler(new FileDataSource(file.toFile())));
+        T result = supplier.get();
 
         //Echo all X-Road headers back
         for (Header h : xroadHeaders.values()) {
             h.setDirection(Header.Direction.DIRECTION_INOUT);
         }
 
-        return response;
+        return result;
+    }
+
+    interface ThrowingSupplier<T> {
+        T get() throws ErrorResponse;
     }
 
     /*

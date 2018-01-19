@@ -21,37 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package fi.vrk.xroad.fileservice.client;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.function.Function;
+package fi.vrk.xroad.fileservice;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+
 
 /**
- * A function that throws checked exceptions
- *
- * @param <T> Value type
- * @param <R> Return value type
+ * <p>Java class for PutResponseType complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType name="PutResponseType"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="success" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
+ * </pre>
+ * 
+ * 
  */
-@FunctionalInterface
-public interface Throwing<T, R> {
-    R apply(T t) throws Exception;
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "PutResponseType", propOrder = {
+    "success"
+})
+public class PutResponseType {
+
+    protected boolean success;
 
     /**
-     * Wrap an checked exception throwing function and return a function that
-     * throws only unchecked exceptions.
+     * Gets the value of the success property.
+     * 
      */
-    static <T, R> Function<T, R> wrap(Throwing<T, R> t) {
-        return v -> {
-            try {
-                return t.apply(v);
-            } catch (RuntimeException e) {
-                throw e;
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        };
+    public boolean isSuccess() {
+        return success;
     }
+
+    /**
+     * Sets the value of the success property.
+     * 
+     */
+    public void setSuccess(boolean value) {
+        this.success = value;
+    }
+
 }

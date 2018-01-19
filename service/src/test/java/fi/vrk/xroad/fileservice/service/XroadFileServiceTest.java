@@ -35,10 +35,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.activation.DataHandler;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * XRoad File Service Integration test
@@ -46,7 +50,11 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {"server.address=127.0.0.1", "outgoing-directory=./build"},
+        properties = {
+                "server.address=127.0.0.1",
+                "outgoing-directory=./build/resources/test",
+                "incoming-directory=./build/resources/test"
+        },
         classes = Application.class
 )
 public class XroadFileServiceTest {
@@ -66,15 +74,42 @@ public class XroadFileServiceTest {
 
     @Test
     public void shouldDownloadTestFile() throws Exception {
-        DataHandler result = client.get("/resources/test/test.txt");
+        DataHandler result = client.get("test.txt");
         final ByteArrayOutputStream buf = new ByteArrayOutputStream();
         result.writeTo(buf);
         assertTrue(new String(buf.toByteArray(), StandardCharsets.UTF_8).startsWith("TEST"));
     }
 
     @Test(expected = ErrorResponse.class)
-    public void shouldReturnError() throws Exception {
-        client.get("/resources/test/notfound.txt");
+    public void shouldNotFindFile() throws Exception {
+        client.get("notfound.txt");
+    }
+
+    @Test(expected = ErrorResponse.class)
+    public void shouldRejectFileName() throws Exception {
+        client.get("../../../build.gradle");
+    }
+
+    @Test
+    public void shouldUploadFile() throws Exception {
+        Files.deleteIfExists(Paths.get("build/resources/test/upload"));
+        client.put("upload", new ByteArrayInputStream("TEST".getBytes()));
+    }
+
+    @Test(expected = ErrorResponse.class)
+    public void shouldNotOverwrite() throws Exception {
+        Files.deleteIfExists(Paths.get("build/resources/test/overwrite"));
+        try {
+            client.put("overwrite", new ByteArrayInputStream("FIRST".getBytes()));
+        } catch (ErrorResponse e) {
+            fail(e.getMessage());
+        }
+        client.put("overwrite", new ByteArrayInputStream("SECOND".getBytes()));
+    }
+
+    @Test
+    public void shouldListFiles() throws Exception {
+        assertTrue(client.list().contains("test.txt"));
     }
 
 }

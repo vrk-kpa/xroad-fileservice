@@ -16,41 +16,78 @@ The build produces two runnable jars: the  service (in service/build/libs) and a
 ## Running the Service
 
 1. Create a directory for downloadable files (default location /var/spool/xroad-fileservice/outgoing)
-    ```[sudo] mkdir -p /var/spool/xroad-fileservice/outgoing```
+
+    ```[sudo] mkdir -p /var/spool/xroad-fileservice/outgoing```  
+    The current version does not support subdirectories.
+    
+2. Create a directory for incoming files (default location /var/spool/xroad-fileservice/incoming)
+
+    ```[sudo] mkdir -p /var/spool/xroad-fileservice/incoming```  
+    Change permissions so that writing is allowed by the server process. 
+    Overwriting an existing file is not allowed.
+ 
 2. Run the service:
     ```
-    java -jar service/build/libs/xroad-fileservice-1.0.jar \
+    java -jar service/build/libs/xroad-fileservice.jar \
         --server.port=8080 \
         --outgoing-directory=/var/spool/xroad-fileservice/outgoing
+        --incoming-directory=/var/spool/xroad-fileservice/incoming
     ```
     The parameters are optional if the default values (above) are used.
 
 The service [WSDL](src/main/resources/fileservice.wsdl) is available from http://\<host:port\>/fileservice?wsdl
 
 ## Using the client
+Without parameters, a short usage note is outputted:
 
-    java -jar client/build/libs/xroad-fileclient-1.0.jar \
+    java -jar client/build/libs/xroad-fileclient-1.0.jar
+    Usage: (java -jar ...) <url> <clientId> <memberId> <command> [command arguments]
+    	url     : service or client security server URL
+    	clientId: instanceId/memberClass/memberCode/subsystemCode
+    	memberId: service memberId, same format as clientId
+    	filename: name of the file to fetch
+    	command : get | put | list
+    
+    	          get <remote filename> [local filename]
+    	          remote filename : name of the remote file to fetch
+    	          local filename  : name of the output file, or standard output if omitted
+    
+    	          put <local filename> [remote file name]
+    	          local filename  : name of the input file, or '-' for standard input
+    	          remote filename : name of the remote file (same as local file if omitted)
+    
+    	          list
+    	          (lists downloadable files)
+
+
+**Download a file**
+
+    java -jar client/build/libs/xroad-fileclient.jar \
     http://localhost:8080/fileservice \
     INSTANCE/CLASS/MEMBER/CLIENTSUBSYSTEM \
     INSTANCE/CLASS/MEMBER/SERVICESUBSYSTEM \
-    GET \
-    filename
-    
-Without parameters, a short usage note is outputted:
-    
-    java -jar client/build/libs/xroad-fileclient-1.0.jar
+    get \
+    remotefile \
+    localfile
 
-    Usage: (java -jar ...) <url> <clientId> <memberId> <command> [command arguments]
-	    url     : service or client security server URL
-	    clientId: instanceId/memberClass/memberCode/subsystemCode
-	    memberId: service memberId, same format as clientId
-	    filename: name of the file to fetch
-	    command : get
-
-	              get <filename> [outfile]
-	              filename : name of the file to fetch
-	              outfile  : name of the output file, or standard output if omitted
+**Upload a file**    
     
+    java -jar client/build/libs/xroad-fileclient.jar \
+    http://localhost:8080/fileservice \
+    INSTANCE/CLASS/MEMBER/CLIENTSUBSYSTEM \
+    INSTANCE/CLASS/MEMBER/SERVICESUBSYSTEM \
+    put \
+    localfile \
+    remotefile
+    
+**List downloadable files**
+
+    java -jar client/build/libs/xroad-fileclient.jar \
+    http://localhost:8080/fileservice \
+    INSTANCE/CLASS/MEMBER/CLIENTSUBSYSTEM \
+    INSTANCE/CLASS/MEMBER/SERVICESUBSYSTEM \
+    list
+
 ## Testing without the client
 
 Example request (using curl)

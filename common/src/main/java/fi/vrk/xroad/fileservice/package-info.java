@@ -21,8 +21,5 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-@XmlSchema(elementFormDefault = XmlNsForm.QUALIFIED, namespace = "http://vrk.fi/xroad/fileservice")
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://vrk.fi/xroad/fileservice", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package fi.vrk.xroad.fileservice;
-
-import javax.xml.bind.annotation.XmlNsForm;
-import javax.xml.bind.annotation.XmlSchema;

@@ -24,22 +24,26 @@
 
 package fi.vrk.xroad.fileservice;
 
+import javax.activation.DataHandler;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlMimeType;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for ErrorResponseType complex type.
+ * <p>Java class for PutRequestType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="ErrorResponseType"&gt;
+ * &lt;complexType name="PutRequestType"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="error" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="object" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -49,35 +53,63 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ErrorResponseType", propOrder = {
-    "error"
+@XmlType(name = "PutRequestType", propOrder = {
+    "name",
+    "object"
 })
-public class ErrorResponseType {
+public class PutRequestType {
 
-    protected String error;
+    @XmlElement(required = true)
+    protected String name;
+    @XmlMimeType("application/octet-stream")
+    protected DataHandler object;
 
     /**
-     * Gets the value of the error property.
+     * Gets the value of the name property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getError() {
-        return error;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Sets the value of the error property.
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setError(String value) {
-        this.error = value;
+    public void setName(String value) {
+        this.name = value;
+    }
+
+    /**
+     * Gets the value of the object property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link DataHandler }
+     *     
+     */
+    public DataHandler getObject() {
+        return object;
+    }
+
+    /**
+     * Sets the value of the object property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link DataHandler }
+     *     
+     */
+    public void setObject(DataHandler value) {
+        this.object = value;
     }
 
 }
