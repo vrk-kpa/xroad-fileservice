@@ -1,0 +1,50 @@
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+sourceCompatibility = 1.8
+
+ext {
+    springVersion = '1.5.9.RELEASE'
+    cxfVersion = '3.2.1'
+}
+
+ext['tomcat.version'] =  '8.5.24'
+
+jar {
+    baseName = 'xroad-fileservice'
+    archiveName = "${baseName}.${extension}"
+    manifest {
+        attributes  'Implementation-Title' : 'xroad-fileservice',
+                    'Implementation-Version' : version
+    }
+}
+
+dependencies {
+    compile project(':common')
+
+    compile("org.springframework.boot:spring-boot-starter-web:${springVersion}") {
+        exclude module: 'spring-webmvc'
+    }
+    compile "org.springframework.boot:spring-boot-starter-tomcat:${springVersion}"
+    compile ("org.apache.cxf:cxf-spring-boot-starter-jaxws:${cxfVersion}") {
+        exclude module: 'spring-boot-starter-web'
+    }
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+    compileOnly 'org.projectlombok:lombok:1.16.18'
+
+    testCompile 'junit:junit:4.12'
+    testCompile "org.springframework.boot:spring-boot-starter-test:${springVersion}"
+    testCompile project(':client')
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
+    }
+}
+

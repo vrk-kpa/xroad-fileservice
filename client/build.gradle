@@ -1,0 +1,45 @@
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'idea'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+sourceCompatibility = 1.8
+
+jar {
+    baseName = 'xroad-fileclient'
+    manifest {
+        attributes 'Implementation-Title' : 'xroad-fileclient',
+                'Implementation-Version' : version,
+                'Main-Class' : 'fi.vrk.xroad.fileservice.client.Main'
+    }
+}
+
+shadowJar {
+    classifier = ''
+    version = ''
+    baseName = 'xroad-fileclient'
+    append 'META-INF/cxf/bus-extensions.txt'
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.14.8'
+
+    compile project(':common')
+
+    //could also use built-in jax-ws, but cxf seems to be more efficient when transferring large files
+    compile 'org.apache.cxf:cxf-rt-frontend-jaxws:3.2.1'
+    compile 'org.apache.cxf:cxf-rt-transports-http:3.2.1'
+
+    testCompile 'junit:junit:4.12'
+}
+
+build.dependsOn shadowJar
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
+    }
+}
