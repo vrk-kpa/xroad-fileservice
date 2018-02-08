@@ -1,0 +1,12 @@
+Source: xroad-fileservice
+Section: X-Road
+Priority: extra
+Maintainer:
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.3
+
+Package: xroad-fileservice
+Architecture: all
+Pre-depends: dpkg (>= 1.15.7.2)
+Depends: ${misc:Depends}, java8-runtime-headless, ca-certificates-java
+Description: Fle service on X-Road

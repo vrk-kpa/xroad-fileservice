@@ -1,0 +1,15 @@
+[Unit]
+Description=X-Road Catalog Lister
+Wants=postgresql.service
+After=network.target postgresql.service
+
+[Service]
+PermissionsStartOnly=true
+User=xroad-fileservice
+Group=xroad-fileservice
+ExecStart=/usr/share/xroad/bin/xroad-fileservice
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
