@@ -15,7 +15,20 @@ The build produces two runnable jars: the  service (in service/build/libs) and a
 
 
 ## Installation
-Debian and Redhat release packages are available from  http://www.nic.funet.fi/pub/csc/x-road/xroad-fileservice/
+Debian and Redhat release packages are available in repository: http://www.nic.funet.fi/pub/csc/x-road/xroad-fileservice/
+
+#### Ubuntu
+```sudo apt install xroad-fileservice```
+
+Verify service is runnung: <br/>
+```initctl status xroad-fileservice```
+
+Using service:<br/>
+```initctl stop xroad-fileservice```
+```initctl start xroad-fileservice```
+
+#### Redhat
+
 
 ## Running the Service
 
