@@ -13,6 +13,10 @@ Requires JDK 8 to build and JRE 8 to run.
 
 The build produces two runnable jars: the  service (in service/build/libs) and a simple client (in client/build/libs)
 
+
+## Installation
+Debian and Redhat release packages are available from  http://www.nic.funet.fi/pub/csc/x-road/xroad-fileservice/
+
 ## Running the Service
 
 1. Create a directory for downloadable files (default location /var/spool/xroad-fileservice/outgoing)
