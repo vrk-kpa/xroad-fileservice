@@ -9,4 +9,4 @@ Package: xroad-fileservice
 Architecture: all
 Pre-depends: dpkg (>= 1.15.7.2)
 Depends: ${misc:Depends}, java8-runtime-headless, ca-certificates-java
-Description: Fle service on X-Road
+Description: X-Road file service

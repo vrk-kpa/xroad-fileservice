@@ -20,7 +20,7 @@ Debian and Redhat release packages are available in repository: http://www.nic.f
 #### Ubuntu
 ```sudo apt install xroad-fileservice```
 
-Verify service is runnung: <br/>
+Verify service is running: <br/>
 ```initctl status xroad-fileservice```
 
 Using service:<br/>

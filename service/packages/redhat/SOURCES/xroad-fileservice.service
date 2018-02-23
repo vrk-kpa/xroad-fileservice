@@ -1,5 +1,5 @@
 [Unit]
-Description=X-Road Catalog Lister
+Description=X-Road file service
 Wants=postgresql.service
 After=network.target postgresql.service
 
