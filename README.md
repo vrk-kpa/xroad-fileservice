@@ -13,7 +13,6 @@ Requires JDK 8 to build and JRE 8 to run.
 
 The build produces two runnable jars: the  service (in service/build/libs) and a simple client (in client/build/libs)
 
-
 ## Installation
 Debian and Redhat release packages are available in repository: http://www.nic.funet.fi/pub/csc/x-road/xroad-fileservice/
 
@@ -34,13 +33,9 @@ Using service:<br/>
 Verify service is running: <br/>
 ```systemctl status xroad-fileservice```
     
-    
 Using service:<br/>    
 ```systemctl stop xroad-fileservice```<br/>
 ```systemctl start xroad-fileservice```
-    
-
-    
 
 ## Running the Service
 
