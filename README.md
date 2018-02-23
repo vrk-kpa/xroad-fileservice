@@ -36,7 +36,7 @@ Verify service is running: <br/>
     
     
 Using service:<br/>    
-```systemctl stop xroad-fileservice```
+```systemctl stop xroad-fileservice```<br/>
 ```systemctl start xroad-fileservice```
     
 
