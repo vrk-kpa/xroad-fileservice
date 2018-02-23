@@ -24,11 +24,23 @@ Verify service is running: <br/>
 ```initctl status xroad-fileservice```
 
 Using service:<br/>
-```initctl stop xroad-fileservice```
+```initctl stop xroad-fileservice```<br/>
 ```initctl start xroad-fileservice```
 
 #### Redhat
 
+```sudo yum install xroad-fileservice```
+    
+Verify service is running: <br/>
+```systemctl status xroad-fileservice```
+    
+    
+Using service:<br/>    
+```systemctl stop xroad-fileservice```
+```systemctl start xroad-fileservice```
+    
+
+    
 
 ## Running the Service
 
