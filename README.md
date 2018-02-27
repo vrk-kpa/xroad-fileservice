@@ -3,17 +3,8 @@
 File Service - a sample web service for transferring files over X-Road. Currently supports only serving files.
 The file contents are returned using [MTOM](https://www.w3.org/Submission/soap11mtom10)
 
-## Building
-
-Requires JDK 8 to build and JRE 8 to run.
-
-    git clone https://github.com/vrk-kpa/xroad-fileservice
-    cd xroad-fileservice
-    ./gradlew build
-
-The build produces two runnable jars: the  service (in service/build/libs) and a simple client (in client/build/libs)
-
-## Installation
+## Option 1: install jar as a package from reposotory - automatic execution as a service
+### Installation
 Debian and Redhat release packages are available in repository: http://www.nic.funet.fi/pub/csc/x-road/xroad-fileservice/
 
 #### Ubuntu
@@ -37,7 +28,18 @@ Using service:<br/>
 ```systemctl stop xroad-fileservice```<br/>
 ```systemctl start xroad-fileservice```
 
-## Running the Service
+## Option 2: build jar from sources and execute manually
+### Building
+
+Requires JDK 8 to build and JRE 8 to run.
+
+    git clone https://github.com/vrk-kpa/xroad-fileservice
+    cd xroad-fileservice
+    ./gradlew build
+
+The build produces two runnable jars: the  service (in service/build/libs) and a simple client (in client/build/libs)
+
+### Running the Service
 
 1. Create a directory for downloadable files (default location /var/spool/xroad-fileservice/outgoing)
 
