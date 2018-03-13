@@ -9,6 +9,7 @@ Debian and Redhat release packages are available in repository:
 http://www.nic.funet.fi/pub/csc/x-road/xroad-fileservice/
 
 #### Ubuntu
+Install service (Ubuntu 14.xx/upstart will start the service automatically):  
 ```sudo apt install xroad-fileservice```
 
 Verify service is running: <br/>
@@ -19,8 +20,11 @@ Using service:<br/>
 ```initctl start xroad-fileservice```
 
 #### Redhat
-
+Install service:  
 ```sudo yum install xroad-fileservice```
+
+Redhat/system.d requires manual service start:  
+```systemctl start xroad-fileservice```
     
 Verify service is running: <br/>
 ```systemctl status xroad-fileservice```
