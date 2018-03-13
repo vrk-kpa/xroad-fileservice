@@ -5,7 +5,8 @@ The file contents are returned using [MTOM](https://www.w3.org/Submission/soap11
 
 ## Option 1: install jar as a package from reposotory - automatic execution as a service
 ### Installation
-Debian and Redhat release packages are available in repository: http://www.nic.funet.fi/pub/csc/x-road/xroad-fileservice/
+Debian and Redhat release packages are available in repository: 
+http://www.nic.funet.fi/pub/csc/x-road/xroad-fileservice/
 
 #### Ubuntu
 ```sudo apt install xroad-fileservice```
