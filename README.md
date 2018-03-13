@@ -12,11 +12,11 @@ http://www.nic.funet.fi/pub/csc/x-road/xroad-fileservice/
 Install service (Ubuntu 14.xx/upstart will start the service automatically):  
 ```sudo apt install xroad-fileservice```
 
-Verify service is running: <br/>
+Verify service is running:  
 ```initctl status xroad-fileservice```
 
-Using service:<br/>
-```initctl stop xroad-fileservice```<br/>
+Using service:  
+```initctl stop xroad-fileservice```  
 ```initctl start xroad-fileservice```
 
 #### Redhat
@@ -26,11 +26,11 @@ Install service:
 Redhat/system.d requires manual service start:  
 ```systemctl start xroad-fileservice```
     
-Verify service is running: <br/>
+Verify service is running:  
 ```systemctl status xroad-fileservice```
     
-Using service:<br/>    
-```systemctl stop xroad-fileservice```<br/>
+Using service:  
+```systemctl stop xroad-fileservice```  
 ```systemctl start xroad-fileservice```
 
 ## Option 2: build jar from sources and execute manually
