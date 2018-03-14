@@ -32,8 +32,8 @@ mkdir -p %{buildroot}/var/log/xroad/
 cp -p %{src}/../../build/libs/xroad-fileservice.jar %{buildroot}%{jlib}
 cp -p %{src}/SOURCES/%{name}.service %{buildroot}%{_unitdir}
 cp -p %{src}/SOURCES/%{name} %{buildroot}/usr/share/xroad/bin
-mkdir -p %{buildroot}/xroad-fileservice/outgoing
-mkdir -p %{buildroot}/xroad-fileservice/incoming
+mkdir -p %{buildroot}/var/spool/xroad-fileservice/outgoing
+mkdir -p %{buildroot}/var/spool/xroad-fileservice/incoming
 
 
 %clean
