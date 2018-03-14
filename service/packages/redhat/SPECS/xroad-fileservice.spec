@@ -40,9 +40,11 @@ mkdir -p %{buildroot}/var/spool/xroad-fileservice/incoming
 rm -rf %{buildroot}
 
 %files
+%defattr(0640,xroad-fileservice,xroad-fileservice,0751)
 %attr(644,root,root) %{_unitdir}/%{name}.service
-%attr(755,xroad-fileservice,xroad-fileservice) %{jlib}/%{name}.jar
-%attr(744,xroad-fileservice,xroad-fileservice) /usr/share/xroad/bin/%{name}
+%{jlib}/%{name}.jar
+/usr/share/xroad/bin/%{name}
+/var/spool/xroad-fileservice
 
 %pre
 if ! id xroad-fileservice > /dev/null 2>&1 ; then
