@@ -9,5 +9,11 @@ fi
 chmod 755 /usr/lib/xroad-fileservice/xroad-fileservice.jar
 chown -R xroad-fileservice:xroad-fileservice /usr/lib/xroad-fileservice
 
+mkdir -p /var/spool/xroad-fileservice/incoming
+mkdir -p /var/spool/xroad-fileservice/outgoing
+
+chown -R xroad-fileservice:xroad-fileservice /var/spool/xroad-fileservice/incoming
+chown -R xroad-fileservice:xroad-fileservice /var/spool/xroad-fileservice/outgoing
+
 
 invoke-rc.d xroad-fileservice start
