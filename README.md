@@ -12,6 +12,10 @@ http://www.nic.funet.fi/pub/csc/x-road/xroad-fileservice/
 Install service (Ubuntu 14.xx/upstart will start the service automatically):  
 ```sudo apt install xroad-fileservice```
 
+Ubuntu 14 or earlier requires adding repository for java8-runtime-headless:  
+```sudo add-apt-repository ppa:openjdk-r/ppa```  
+```apt-get update```  
+
 Verify service is running:  
 ```initctl status xroad-fileservice```
 
