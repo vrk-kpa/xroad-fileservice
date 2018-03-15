@@ -126,7 +126,8 @@ Without parameters, a short usage note is outputted:
 
 ## Testing without the client
 
-Example request (using curl)
+Example request (using curl)  
+note: In Ubuntu default port is 8070
 ```
 curl -H 'Content-Type:text/xml' --data-binary @-  http://localhost:8080/fileservice <<EOF
 <soapenv:Envelope
