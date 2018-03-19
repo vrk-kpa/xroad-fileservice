@@ -7,6 +7,8 @@ The file contents are returned using [MTOM](https://www.w3.org/Submission/soap11
 ### Installation
 Debian and Redhat release packages are available in repository: 
 http://www.nic.funet.fi/pub/csc/x-road/xroad-fileservice/
+  
+Supported versions: Ubuntu 14.04 and RHEL7
 
 #### Ubuntu
 Precondition: Ubuntu 14 or earlier requires adding repository for java8-runtime-headless before fileservice installation:  
