@@ -30,8 +30,9 @@ Using service:
 Install service:  
 ```sudo yum install xroad-fileservice```
 
-Redhat/system.d requires manual service start:  
-```systemctl start xroad-fileservice```
+Redhat/system.d requires manual service start and enabling it to be started automatically in server boot:  
+```systemctl start xroad-fileservice```  
+```systemctl enable xroad-fileservice```
     
 Verify service is running:  
 ```systemctl status xroad-fileservice```
