@@ -3,7 +3,45 @@
 File Service - a sample web service for transferring files over X-Road. Currently supports only serving files.
 The file contents are returned using [MTOM](https://www.w3.org/Submission/soap11mtom10)
 
-## Building
+## Option 1: install jar as a package from reposotory - automatic execution as a service
+### Installation
+Debian and Redhat release packages are available in repository: 
+http://www.nic.funet.fi/pub/csc/x-road/xroad-fileservice/
+  
+Supported versions: Ubuntu 14.04 and RHEL7
+
+#### Ubuntu
+Precondition: Ubuntu 14 or earlier requires adding repository for java8-runtime-headless before fileservice installation:  
+```sudo add-apt-repository ppa:openjdk-r/ppa```  
+```apt-get update```  
+
+Install service (Ubuntu 14.xx/upstart will start the service automatically):  
+```sudo apt install xroad-fileservice```
+
+Verify service is running:  
+```initctl status xroad-fileservice```
+
+Using service:  
+```initctl stop xroad-fileservice```  
+```initctl start xroad-fileservice```
+
+#### Redhat
+Install service:  
+```sudo yum install xroad-fileservice```
+
+Redhat/system.d requires manual service start and enabling it to be started automatically in server boot:  
+```systemctl start xroad-fileservice```  
+```systemctl enable xroad-fileservice```
+    
+Verify service is running:  
+```systemctl status xroad-fileservice```
+    
+Using service:  
+```systemctl stop xroad-fileservice```  
+```systemctl start xroad-fileservice```
+
+## Option 2: build jar from sources and execute manually
+### Building
 
 Requires JDK 8 to build and JRE 8 to run.
 
@@ -13,7 +51,7 @@ Requires JDK 8 to build and JRE 8 to run.
 
 The build produces two runnable jars: the  service (in service/build/libs) and a simple client (in client/build/libs)
 
-## Running the Service
+### Running the Service
 
 1. Create a directory for downloadable files (default location /var/spool/xroad-fileservice/outgoing)
 
@@ -90,7 +128,7 @@ Without parameters, a short usage note is outputted:
 
 ## Testing without the client
 
-Example request (using curl)
+Example request (using curl)  
 ```
 curl -H 'Content-Type:text/xml' --data-binary @-  http://localhost:8080/fileservice <<EOF
 <soapenv:Envelope

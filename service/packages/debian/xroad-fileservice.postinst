@@ -1,0 +1,9 @@
+#!/bin/sh
+if ! id xroad-fileservice > /dev/null 2>&1 ; then
+    adduser --system --no-create-home --group --disabled-password --shell /bin/false xroad-fileservice
+fi                
+
+chown -R xroad-fileservice:xroad-fileservice /var/spool/xroad-fileservice/incoming
+chown -R xroad-fileservice:xroad-fileservice /var/spool/xroad-fileservice/outgoing
+
+invoke-rc.d xroad-fileservice start
