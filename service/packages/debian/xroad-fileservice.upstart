@@ -1,7 +1,5 @@
 # Place in /etc/init
-
 description "File service on X-Road"
-author "Sami Kallio <sami.kallio@gofore.com>"
 
 start on runlevel [2345]
 stop on runlevel [!2345]
@@ -15,6 +13,6 @@ console log
 
 script
 
-exec java -Dserver.port=8070 -jar /usr/lib/xroad-fileservice/xroad-fileservice.jar
+exec java -jar /usr/lib/xroad-fileservice/xroad-fileservice.jar
 
 end script

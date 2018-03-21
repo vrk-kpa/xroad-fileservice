@@ -9,7 +9,7 @@ Release:            %{rel}%{?snapshot}%{?dist}
 Summary:            X-Road Service Listing
 Group:              Applications/Internet
 License:            MIT
-Requires:           systemd, java-1.8.0-openjdk
+Requires:           systemd, jre-1.8.0-headless
 Requires(post):     systemd
 Requires(preun):    systemd
 Requires(postun):   systemd
