@@ -13,7 +13,7 @@ CMD="-ba"
 rm -rf ${ROOT}/RPMS/*
 
 rpmbuild \
-    --define "xroad_fileservice_version 1.0" \
+    --define "xroad_fileservice_version 1.1.0" \
     --define "rel $RELEASE" \
     --define "snapshot .$SNAPSHOT" \
     --define "_topdir $ROOT" \

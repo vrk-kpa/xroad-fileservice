@@ -15,7 +15,7 @@ Requires(preun):    systemd
 Requires(postun):   systemd
 
 %define src %{_topdir}
-%define jlib /usr/lib/xroad-fileservice
+%define dst /usr/lib/xroad-fileservice
 
 %description
 X-Road service listing
@@ -25,26 +25,21 @@ X-Road service listing
 %build
 
 %install
-mkdir -p %{buildroot}%{jlib}
+mkdir -p %{buildroot}%{dst}
 mkdir -p %{buildroot}%{_unitdir}
-mkdir -p %{buildroot}/usr/share/xroad/bin
-mkdir -p %{buildroot}/var/log/xroad/
-cp -p %{src}/../../build/libs/xroad-fileservice.jar %{buildroot}%{jlib}
+cp -p %{src}/../../build/libs/xroad-fileservice.jar %{buildroot}%{dst}
 cp -p %{src}/SOURCES/%{name}.service %{buildroot}%{_unitdir}
-cp -p %{src}/SOURCES/%{name} %{buildroot}/usr/share/xroad/bin
 mkdir -p %{buildroot}/var/spool/xroad-fileservice/outgoing
 mkdir -p %{buildroot}/var/spool/xroad-fileservice/incoming
-
 
 %clean
 rm -rf %{buildroot}
 
 %files
-%defattr(0640,xroad-fileservice,xroad-fileservice,0751)
-%attr(644,root,root) %{_unitdir}/%{name}.service
-%{jlib}/%{name}.jar
-/usr/share/xroad/bin/%{name}
-/var/spool/xroad-fileservice
+%defattr(0644,root,root,0755)
+%{_unitdir}/%{name}.service
+%{dst}/%{name}.jar
+%attr(770,xroad-fileservice,xroad-fileservice) /var/spool/xroad-fileservice
 
 %pre
 if ! id xroad-fileservice > /dev/null 2>&1 ; then

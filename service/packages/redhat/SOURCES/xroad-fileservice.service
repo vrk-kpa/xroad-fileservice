@@ -1,13 +1,11 @@
 [Unit]
 Description=X-Road file service
-Wants=postgresql.service
-After=network.target postgresql.service
+After=network.target
 
 [Service]
-PermissionsStartOnly=true
 User=xroad-fileservice
 Group=xroad-fileservice
-ExecStart=/usr/share/xroad/bin/xroad-fileservice
+ExecStart=/usr/bin/java -jar /usr/lib/xroad-fileservice/xroad-fileservice.jar
 Restart=on-failure
 
 [Install]

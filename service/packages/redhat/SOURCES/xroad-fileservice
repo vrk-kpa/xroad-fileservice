@@ -1,4 +1,0 @@
-#!/bin/sh
-set -x
-exec ${JAVA_HOME}/bin/java -jar /usr/lib/xroad-fileservice/xroad-fileservice.jar
-
