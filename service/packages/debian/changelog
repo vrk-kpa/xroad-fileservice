@@ -1,5 +1,4 @@
-xroad-fileservice (0.1.0) UNRELEASED; urgency=low
-
+xroad-fileservice (0.1.0-1) trusty; urgency=low
     * Initial release.
 
- -- Sami Kallio <sjk@sjk-Precision-M4800>  Wed, 27 Jan 2016 15:54:27 +0200
+ -- Gofore Oyj <palveluvayla@gofore.com>  Wed, 21 Mar 2018 09:45:17 +0200
